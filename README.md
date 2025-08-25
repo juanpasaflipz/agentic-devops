@@ -1,5 +1,24 @@
 # Agentic DevOps (MVP)
 
+**Agentic DevOps** is an **event-driven orchestration framework** that combines AI-powered planning with DevOps automation.
+
+This project provides:
+- ⚡ **Event-driven workflows**: Handle CI/CD, infrastructure changes, incidents, and metrics through event simulation and orchestration.
+- 🧠 **Conductor + Tool Router**: A minimal LLM-based conductor that interprets events, applies policies (`policy.yaml`), and routes tasks to the right DevOps tools.
+- 🔧 **Extensible integrations**: Includes adapters for GitHub, Kubernetes, metrics systems, and more.
+- 📘 **Runbooks & Guardrails**: Predefined `runbooks/` and policies for reproducibility, safety, and cost controls.
+- 🚀 **MVP-first design**: Lightweight, opinionated setup to bootstrap an intelligent DevOps system in minutes.
+
+### Typical Use Cases
+- Automating **CI/CD workflows** with AI-driven decision-making.
+- Managing **cloud infrastructure events** (Terraform plans, cost guardrails, etc.).
+- Handling **incidents and SRE tasks** with runbook-driven responses.
+- Experimenting with **agentic AI in DevOps pipelines**.
+
+This repo is intended for developers, SREs, and researchers who want to explore the intersection of **LLMs, agents, and DevOps automation**.
+
+---
+
 Event-driven orchestrator with Conductor planning and minimal tool router.
 See `policy.yaml` and the `runbooks/` directory for configuration details.
 
