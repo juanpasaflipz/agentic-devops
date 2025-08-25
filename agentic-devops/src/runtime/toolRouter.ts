@@ -13,7 +13,7 @@ import { createToolCall, completeToolCall } from '../runtime/db';
 type ToolHandler = (params: Record<string, unknown>) => Promise<unknown>;
 
 const handlers: Record<string, ToolHandler> = {
-  // TODO: wire real implementations under tools/
+  // Implementations are wired under tools/
   git_comment_pr: async (params) => {
     const { repo, pr, body } = params as { repo: string; pr: number; body: string };
     return commentPR({ repo, pr, body });

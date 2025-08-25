@@ -1,3 +1,4 @@
+import axios from 'axios';
 export type ConductorInput = {
   event: unknown;
   context: unknown;
@@ -19,7 +20,19 @@ export async function callLLMConductor(
   _toolRouter: ToolRouter,
   runId?: number | null,
 ): Promise<Plan> {
-  // TODO: Implement LLM-based planning logic
+  // Optional: external LLM conductor integration
+  const conductorUrl = process.env.LLM_CONDUCTOR_URL;
+  if (conductorUrl) {
+    try {
+      const { data } = await axios.post(conductorUrl, { input, runId });
+      if (data && typeof data.summary === 'string') {
+        return { summary: data.summary } as Plan;
+      }
+    } catch {
+      // Fall back to built-in heuristics below
+    }
+  }
+  // Built-in heuristic planner (safe default without external LLM)
   // For now, route events to appropriate agents based on event type
   const evt = (input.event as Record<string, unknown>) ?? {};
   if (evt?.action === 'deploy' && evt?.service && evt?.image) {
