@@ -1,0 +1,10 @@
+{
+  "source": "sample",
+  "action": "deploy",
+  "environment": "prod",
+  "service": "checkout",
+  "image": "registry.example.com/app:1.0.0",
+  "risk": "high",
+  "approvals_count": 2,
+  "nowIso": "2025-01-14T12:00:00-06:00"
+}

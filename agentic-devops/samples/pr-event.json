@@ -1,0 +1,8 @@
+{
+  "source": "github",
+  "action": "ci",
+  "repo": "acme/shop",
+  "ref": "refs/pull/123/merge",
+  "pr": { "number": 123 },
+  "pipeline": "test"
+}

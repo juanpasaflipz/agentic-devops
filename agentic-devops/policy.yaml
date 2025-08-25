@@ -1,0 +1,24 @@
+change_windows:
+  prod:
+    disallow:
+      - { from: 'Fri 18:00', to: 'Mon 08:00', tz: 'America/Mexico_City' }
+approvals:
+  prod:
+    low_risk: 0
+    medium_risk: 1
+    high_risk: 2
+slo_gates:
+  default:
+    latency_p95_ms: 300
+    error_rate_pct: 0.5
+    cpu_saturation_pct: 85
+security:
+  min_cvss: 7.0
+  block_on_secrets_leak: true
+canary:
+  max_percent: 10
+  window_min: 20
+cost:
+  monthly_drift_pct_max: 10
+redaction:
+  patterns: ['AKIA[0-9A-Z]{16}', 'ghp_[A-Za-z0-9]{36}']

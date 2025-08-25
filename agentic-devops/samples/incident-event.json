@@ -1,0 +1,8 @@
+{
+  "source": "monitoring",
+  "action": "incident",
+  "service": "checkout",
+  "env": "prod",
+  "metric": "http_5xx_rate",
+  "severity": "high"
+}

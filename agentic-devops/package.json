@@ -1,0 +1,66 @@
+{
+  "name": "agentic-devops",
+  "version": "0.1.0",
+  "description": "Event-driven DevOps orchestrator with AI-powered planning and automated tool execution",
+  "license": "MIT",
+  "keywords": [
+    "devops",
+    "automation",
+    "orchestration",
+    "ci-cd",
+    "infrastructure",
+    "sre",
+    "ai",
+    "llm"
+  ],
+  "author": "Agentic DevOps Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juanpasaflipz/agentic-devops.git"
+  },
+  "bugs": {
+    "url": "https://github.com/juanpasaflipz/agentic-devops/issues"
+  },
+  "homepage": "https://github.com/juanpasaflipz/agentic-devops#readme",
+  "scripts": {
+    "dev": "tsx --watch src/orchestrator.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/orchestrator.js",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "format": "prettier -w .",
+    "format:check": "prettier -c .",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "dependencies": {
+    "@google-cloud/monitoring": "^5.3.0",
+    "@google-cloud/secret-manager": "^6.1.0",
+    "@google-cloud/storage": "^7.17.0",
+    "@kubernetes/client-node": "^1.3.0",
+    "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "luxon": "^3.7.1",
+    "pg": "^8.16.3",
+    "redis": "^5.8.2",
+    "yaml": "^2.4.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^4.17.21",
+    "@types/luxon": "^3.7.1",
+    "@types/node": "^20.12.12",
+    "@types/pg": "^8.15.5",
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@typescript-eslint/parser": "^7.16.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
+  }
+}

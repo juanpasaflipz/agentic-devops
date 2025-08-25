@@ -1,0 +1,6 @@
+{
+  "source": "manual",
+  "action": "infra_plan_apply",
+  "workspace": "prod",
+  "dir": "infra/gke"
+}

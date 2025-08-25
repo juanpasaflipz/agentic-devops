@@ -1,0 +1,30 @@
+name: Agentic DevOps Trigger
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  notify-orchestrator:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send event
+        env:
+          ORCH_URL: ${{ secrets.ORCH_URL }}
+          ORCH_TOKEN: ${{ secrets.ORCH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ORCH_URL:-}" ]; then echo "ORCH_URL secret missing"; exit 0; fi
+          if [ -z "${ORCH_TOKEN:-}" ]; then echo "ORCH_TOKEN secret missing"; exit 0; fi
+          curl -sS -X POST "$ORCH_URL/event" \
+            -H "Authorization: Bearer $ORCH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d @<(jq -n \
+              --arg repo "$GITHUB_REPOSITORY" \
+              --arg ref "$GITHUB_REF" \
+              --arg sha "$GITHUB_SHA" \
+              --argjson pr "${{ toJson(github.event.pull_request) }}" \
+              '{source:"github", repo:$repo, ref:$ref, sha:$sha, pr:$pr}')
