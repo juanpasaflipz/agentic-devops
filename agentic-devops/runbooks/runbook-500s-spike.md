@@ -13,11 +13,9 @@ steps:
 - "if recent deploy < 30m → k8s_rollback(environment: {{env}}, service: {{service}})"
 - "notify(channel: '#ops', severity: 'critical', message: 'Rolled back {{service}} {{env}} due to 5xx spike')"
   postmortem_template: |
-
-# Postmortem: {{service}} {{env}}
-
-Timeline:
-Impact:
-Suspected Cause:
-Remediation:
-Follow-ups:
+  # Postmortem: {{service}} {{env}}
+  Timeline:
+  Impact:
+  Suspected Cause:
+  Remediation:
+  Follow-ups:

@@ -88,7 +88,58 @@ Scripts (see `scripts/`):
 - Port in use: `lsof -ti :8080 | xargs kill -9 2>/dev/null || true` or run `PORT=8081 make dev`
 - Compose warnings `SERVICE` / `WINDOW_MINm`: escape `$` as `$$` in `.env`
 - Missing module errors: install required deps, e.g., `pnpm add @google-cloud/storage`
-- Don’t append comments after commands (e.g., avoid `pnpm install # first time only`)
+- Don't append comments after commands (e.g., avoid `pnpm install # first time only`)
+
+## Testing
+
+### Quick Validation
+
+```bash
+# Basic smoke test
+make smoke
+
+# Comprehensive system test
+make test
+
+# Test against local instance
+make test-local
+
+# Test against remote instance (set ORCH_URL)
+make test-remote
+```
+
+### Test Coverage
+
+The test suite validates:
+
+- ✅ Health endpoints and basic connectivity
+- ✅ Event processing for all agent types (CI, SRE, Release, Infrastructure)
+- ✅ Policy enforcement and change window validation
+- ✅ Data persistence and run tracking
+- ✅ Tool execution and error handling
+- ✅ API response structure and data validation
+
+### Automated Testing
+
+- **GitHub Actions**: Runs on every push/PR with Postgres/Redis services
+- **Local Testing**: Use `make test` for full validation
+- **CI Integration**: Tests build, lint, format, and system functionality
+
+### Manual Testing
+
+```bash
+# Start the system
+make up && make dev
+
+# In another terminal, test endpoints
+curl localhost:8080/healthz
+curl localhost:8080/runs
+
+# Test specific agents
+make pr          # Test CI Agent
+make terraform   # Test Infrastructure Agent
+make seed        # Test all agents with sample data
+```
 
 ## Next Steps
 

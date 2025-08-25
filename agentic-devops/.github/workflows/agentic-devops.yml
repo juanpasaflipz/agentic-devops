@@ -19,7 +19,8 @@ jobs:
           set -euo pipefail
           if [ -z "${ORCH_URL:-}" ]; then echo "ORCH_URL secret missing"; exit 0; fi
           if [ -z "${ORCH_TOKEN:-}" ]; then echo "ORCH_TOKEN secret missing"; exit 0; fi
-          curl -sS -X POST "$ORCH_URL/event" \
+          echo "Sending event to orchestrator at $ORCH_URL"
+          response=$(curl -sS -w "%{http_code}" -X POST "$ORCH_URL/event" \
             -H "Authorization: Bearer $ORCH_TOKEN" \
             -H "Content-Type: application/json" \
             -d @<(jq -n \
@@ -27,4 +28,12 @@ jobs:
               --arg ref "$GITHUB_REF" \
               --arg sha "$GITHUB_SHA" \
               --argjson pr "${{ toJson(github.event.pull_request) }}" \
-              '{source:"github", repo:$repo, ref:$ref, sha:$sha, pr:$pr}')
+              '{source:"github", repo:$repo, ref:$ref, sha:$sha, pr:$pr}'))
+          http_code="${response: -3}"
+          if [[ "$http_code" -ge 200 && "$http_code" -lt 300 ]]; then
+            echo "Event sent successfully (HTTP $http_code)"
+          else
+            echo "Failed to send event (HTTP $http_code)"
+            echo "Response: ${response%???}"
+            exit 1
+          fi

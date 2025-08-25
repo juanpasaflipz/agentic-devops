@@ -1,0 +1,88 @@
+name: Test System
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: agentic_devops_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Run linting
+        run: pnpm run lint
+
+      - name: Check formatting
+        run: pnpm run format:check
+
+      - name: Type check
+        run: pnpm run typecheck
+
+      - name: Start system
+        run: |
+          pnpm run build
+          nohup node dist/orchestrator.js > orchestrator.log 2>&1 &
+          sleep 10
+          curl -f http://localhost:8080/healthz || (cat orchestrator.log && exit 1)
+
+      - name: Run system tests
+        run: |
+          # Wait for system to be ready
+          sleep 5
+          # Run tests
+          ./scripts/test-system.sh http://localhost:8080
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/agentic_devops_test
+          REDIS_URL: redis://localhost:6379
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orchestrator-logs
+          path: orchestrator.log
